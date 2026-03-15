@@ -1,15 +1,24 @@
 import { useState } from 'react'
 import { pokemonData } from './pokemonData'
 
-  function PokemonCard({pokemon, setCurrentIndex}) {
+  function PokemonCard({pokemon, currentIndex, setCurrentIndex}) {
     const [isFlipped, setIsFlipped] = useState(0)
 
     const cardFlip = () => {
       setIsFlipped(!isFlipped)
     }
 
+    const backButton = () => {
+      if (currentIndex > 0) {
+        setCurrentIndex(currentIndex - 1)
+      }
+      setIsFlipped(0)
+    }
+
     const nextButton = () => {
-      setCurrentIndex(Math.floor(Math.random() * pokemonData.length))
+      if (currentIndex < pokemonData.length - 1) {
+        setCurrentIndex(currentIndex + 1)
+      }
       setIsFlipped(0)
     }
 
@@ -18,7 +27,13 @@ import { pokemonData } from './pokemonData'
         <div className="pokemon-card" onClick={cardFlip}>
           <img src={isFlipped ? pokemon.after : pokemon.before}/>
         </div>
-        <button onClick={nextButton}>Next</button>
+        <label>
+          Guess the answer here:
+          <input name="guessInput"></input>
+        </label>
+        <button onClick={backButton}>Submit</button>
+        <button onClick={backButton} style={{color: currentIndex === 0 ? 'gray' : 'white'}}>Back</button>
+        <button onClick={nextButton} style={{color: currentIndex >= pokemonData.length - 1 ? 'gray' : 'white'}}>Next</button>
       </div>
     )
   }
