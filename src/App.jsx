@@ -3,6 +3,8 @@ import { pokemonData } from './pokemonData'
 
   function PokemonCard({pokemon, currentIndex, setCurrentIndex}) {
     const [isFlipped, setIsFlipped] = useState(0)
+    const [guessInput, setGuessInput] = useState('')
+    const [feedback, setFeedback] = useState(0)
 
     const cardFlip = () => {
       setIsFlipped(!isFlipped)
@@ -13,6 +15,7 @@ import { pokemonData } from './pokemonData'
         setCurrentIndex(currentIndex - 1)
       }
       setIsFlipped(0)
+      
     }
 
     const nextButton = () => {
@@ -22,6 +25,18 @@ import { pokemonData } from './pokemonData'
       setIsFlipped(0)
     }
 
+    const textBox = (e) => {
+      setGuessInput(e.target.value)
+    }
+
+    const submitHandler = () => {
+      if (guessInput.toLowerCase() === pokemon.name.toLowerCase()) {
+        setFeedback(1)
+      } else {
+        setFeedback(0)
+      }
+    }
+
     return (
       <div className="card-wrapper">
         <div className="pokemon-card" onClick={cardFlip}>
@@ -29,9 +44,9 @@ import { pokemonData } from './pokemonData'
         </div>
         <label>
           Guess the answer here:
-          <input name="guessInput"></input>
+          <input name="guessInput" onChange={textBox}></input>
         </label>
-        <button onClick={backButton}>Submit</button>
+        <button onClick={submitHandler} style={{color: feedback === 0 ? 'red' : 'green'}}>Submit</button>
         <button onClick={backButton} style={{color: currentIndex === 0 ? 'gray' : 'white'}}>Back</button>
         <button onClick={nextButton} style={{color: currentIndex >= pokemonData.length - 1 ? 'gray' : 'white'}}>Next</button>
       </div>
