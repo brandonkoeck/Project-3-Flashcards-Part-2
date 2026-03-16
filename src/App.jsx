@@ -4,7 +4,7 @@ import { pokemonData } from './pokemonData'
   function PokemonCard({pokemon, currentIndex, setCurrentIndex}) {
     const [isFlipped, setIsFlipped] = useState(0)
     const [guessInput, setGuessInput] = useState('')
-    const [feedback, setFeedback] = useState(0)
+    const [feedback, setFeedback] = useState(null)
 
     const cardFlip = () => {
       setIsFlipped(!isFlipped)
@@ -15,7 +15,8 @@ import { pokemonData } from './pokemonData'
         setCurrentIndex(currentIndex - 1)
       }
       setIsFlipped(0)
-      
+      setFeedback(null)
+      setGuessInput("")
     }
 
     const nextButton = () => {
@@ -23,6 +24,8 @@ import { pokemonData } from './pokemonData'
         setCurrentIndex(currentIndex + 1)
       }
       setIsFlipped(0)
+      setFeedback(null)
+      setGuessInput("")
     }
 
     const textBox = (e) => {
@@ -42,13 +45,17 @@ import { pokemonData } from './pokemonData'
         <div className="pokemon-card" onClick={cardFlip}>
           <img src={isFlipped ? pokemon.after : pokemon.before}/>
         </div>
-        <label>
-          Guess the answer here:
-          <input name="guessInput" onChange={textBox}></input>
-        </label>
-        <button onClick={submitHandler} style={{color: feedback === 0 ? 'red' : 'green'}}>Submit</button>
+        <div className="guess-section">
+          <label className="guess-label">Guess the answer here:</label>
+          <div className="input-submit-container">
+            <input name="guessInput" value = {guessInput} onChange={textBox} style={{borderColor: feedback === null ? 'black' : feedback === 1 ? 'green' : 'red', borderWidth: '2px'}}></input>
+            <button onClick={submitHandler}>Submit</button>
+          </div>
+        </div>
+        <div className="button-section">
         <button onClick={backButton} style={{color: currentIndex === 0 ? 'gray' : 'white'}}>Back</button>
         <button onClick={nextButton} style={{color: currentIndex >= pokemonData.length - 1 ? 'gray' : 'white'}}>Next</button>
+        </div>
       </div>
     )
   }
